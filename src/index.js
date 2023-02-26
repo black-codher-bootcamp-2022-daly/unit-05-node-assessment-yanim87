@@ -3,6 +3,8 @@ const fs = require("fs");
 const express = require("express");
 const app = express();
 const path = require("path");
+
+const port = 8080;
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 const todoFilePath = process.env.BASE_JSON_PATH;
@@ -24,9 +26,10 @@ app.get("/", (_, res) => {
   res.status(200);
 });
 
-app.get("/todos", (_, res) => {
+//Add GET request with path '/todos'
 
-  res.header("Content-Type","application/json");
+app.get("/todos", (_, res) => {
+  res.header("Content-Type", "application/json");
   res.sendFile(todoFilePath, { root: __dirname });
 
   res.status(200);
@@ -53,24 +56,24 @@ app.get("/todos/completed", (req, res) => {
   const result = profile.filter((item) => item.completed == true);
   res.send(result);
 });
+app.get("/todos/", (req, res) => {
+  const message = "Hello everybody";
+  res.send(message);
+}
+)
 
 //Add POST request with path '/todos'
 app.post('/todos', (_, res) => {
-    const todos = getTodos();
+  
   const newTodo ="Turn on central heating";
-if(newTodo) {
+
+if (newTodo) {
   res.setHeader("Content-Type", "application/json").status(201).push();
   }
   else {
     res.status(400).send("Bad Request");
   }
-   
-})
-app.get("/todos/", (req, res) => {
-  const message = "Hello everybody";
-  res.send(message);
 });
-
 //Add PATCH request with path '/todos/:id
 
 app.get("/todos/:id", (req, res) => {
@@ -87,4 +90,16 @@ app.get("/todos/:id", (req, res) => {
 app.get("/todos/:id/undo", (req, res) => {
   res.send(message);
 });
-//Add DELETE request with path '/todos/:id;
+//Add DELETE request with path '/todos/:id
+
+app.delete("/todos/:01507581-9d12-4c3a-bb60-19d539a11189", (req, res) => {
+  const profile = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "models/todos.json"))
+  );
+});
+
+app.listen(port, function () {
+  console.log(`Node server is running... http://localhost:${port}`);
+});
+
+module.exports = app;
